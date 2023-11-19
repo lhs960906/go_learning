@@ -18,5 +18,5 @@ func TestReadFileAll(t *testing.T) {
 
 // 测试文件复制
 func TestFileCopy(t *testing.T) {
-	files.FileCopy("test.txt", "test_c.txt")
+	files.FileCopy("林乐清.png", "林乐清_c.png")
 }

@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// 写文件
 func FileWrite(filepath string) error {
 	fin, err := os.OpenFile(filepath, os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
@@ -22,6 +23,7 @@ func FileWrite(filepath string) error {
 	return nil
 }
 
+// 读取文件全部内容
 func FileReadAll(filepath string) error {
 	fin, err := os.OpenFile(filepath, os.O_RDONLY, 0644)
 	if err != nil {
@@ -45,6 +47,7 @@ func FileReadAll(filepath string) error {
 	return nil
 }
 
+// 拷贝文件
 func FileCopy(src string, dst string) error {
 	// 只读打开源文件
 	fsrc, err := os.OpenFile(src, os.O_RDONLY, 0644)
