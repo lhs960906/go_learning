@@ -1,14 +1,10 @@
-package Cobra
+package version
 
 import (
 	"fmt"
 
 	"github.com/spf13/cobra"
 )
-
-func init() {
-	rootCmd.AddCommand(versionCmd)
-}
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
@@ -17,4 +13,8 @@ var versionCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Hugo Static Site Generator v0.9 -- HEAD")
 	},
+}
+
+func GetVersionCmd() *cobra.Command {
+	return versionCmd
 }

@@ -1,7 +1,11 @@
-package Cobra
+package cmd_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/lhs960906/Go-Learning/03_CLI/Cobra/cmd"
+)
 
 func TestExecute(t *testing.T) {
-	Execute()
+	cmd.Execute()
 }
