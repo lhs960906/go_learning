@@ -1,0 +1,6 @@
+[mysql]
+Host = 192.168.229.130
+Port = 3306
+Database = config
+User = lhs
+Password = lhs960906
