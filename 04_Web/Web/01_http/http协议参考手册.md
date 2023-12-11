@@ -1,6 +1,53 @@
-## 14.35 Range
+## 3 Protocol Parameters(协议参数)
+### 3.12 Range Units(Range单元)
+```shell
+HTTP/1.1允许客户端请求响应中的部分(一定范围)响应实体。
+HTTP/1.1在Range(第14.35节)和Content-Range(第14.16节)标头字段中使用范围单位。一个实体可以根据不同的结构单元分解为多个子范围。
+	range-unit       = bytes-unit | other-range-unit
+	bytes-unit       = "bytes"
+	other-range-unit = token
+HTTP/1.1定义的唯一范围单位是"bytes"。HTTP/1.1的实现可能会忽略其他单元指定的范围。HTTP/1.1 has been designed to allow implementations of applications that do not depend on knowledge of ranges.
+```
 
-### 14.35.1、Byte Ranges（字节范围）
+
+## 14 Header Field Definitions(头字段定义)
+### 14.5 Accept-Ranges
+```shell
+Accept-Ranges 响应头允许服务端指示请求资源的可接受范围：
+	Accept-Ranges = "Accept-Ranges" ":" acceptable-ranges
+	acceptable-ranges = 1#range-unit | "none"
+接受字节范围请求的源服务器可能会发送：
+	Accept-Ranges: bytes
+但不要求这样做。客户端可以在没有收到所涉及资源的此标头的情况下生成字节范围请求。范围单位在第 3.12 节中定义。
+
+不接受任何类型的资源范围请求的服务器可以发送：
+	Accept-Ranges: none
+以建议客户端不要尝试范围请求。
+```
+
+### 14.16 Content-Range
+Content-Range实体标头与部分实体主体一起发送，以指定应在完整实体主体中的何处应用部分主体。
+
+Range units被定义在了3.12章节。
+```shell
+	Content-Range 			= "Content-Range" ":" content-range-spec        
+	content-range-spec      = byte-content-range-spec
+	byte-content-range-spec = bytes-unit SP                                  
+							  byte-range-resp-spec "/"                                
+							  ( instance-length | "*" )        
+	byte-range-resp-spec 	= (first-byte-pos "-" last-byte-pos)
+	instance-length         = 1*DIGIT
+```
+标头应该指示完整实体主体的总长度，除非该长度未知或难以确定。星号"*"字符表示生成响应时实例长度未知。
+
+与byte-ranges-specifier值(参见第14.35.1节)不同，byte-range-resp-spec必须仅指定一个范围，并且必须包含该范围的第一个和最后一个字节的绝对字节位置。
+具有 `byte-range-resp-spec` 的 `byte-content-range-spec`，其 `last-byte-pos` 值小于其`first-byte-pos` 值，或其 `instance-length` 值小于或等于其 `last-byte-pos` 值，这都是无效的。无效 ``byte-content-range-spec` 的接收者必须忽略它以及随之传输的任何内容。
+
+发送状态码为 416（请求的范围不可满足）的服务器应该包含一个 `byte-range-resp-spec` 为 `*` 的 Content-Range 标头。实例长度指定为当前所选资源的长度。
+
+
+### 14.35 Range
+#### 14.35.1、Byte Ranges（字节范围）
 
 rfc2616 中 14.35 部分定义了 Range 头部。我们来看相关说明：
 
