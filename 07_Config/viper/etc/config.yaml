@@ -2,13 +2,13 @@ mysql:
   active: "pro"
   env:
     pro:
-      ip: "10.2.101.113"
+      ip: "10.2.101.114"
       port: 3306
       dbName: "pro"
       dbUser: "proUser"
       dbPass: "proPass"
     test:
-      ip: "10.2.118.207"
+      ip: "10.2.118.209"
       port: 3306
       dbName: "test"
       dbUser: "testUser"
