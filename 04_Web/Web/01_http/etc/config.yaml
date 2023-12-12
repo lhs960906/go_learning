@@ -1,0 +1,2 @@
+global:
+  concurrency: 5
