@@ -1,3 +1,4 @@
 # 所有生成的二进制文件均不上传
 *.exe
 *.png
+config.yaml
