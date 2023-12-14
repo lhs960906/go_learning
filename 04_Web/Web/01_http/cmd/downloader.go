@@ -3,14 +3,15 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/lhs960906/Go-Learning/04_Web/Web/01_http/cmd/version"
 	"github.com/spf13/cobra"
 )
 
 var Downloader = &cobra.Command{
 	Use:   "downloader [global options] command [command options] [arguments...]",
 	Short: "downloader is a concurrent file downloader",
-	Long:  ``,
-	// 执行 rootCmd 的相关 action
+	Long:  `downloader is a concurrent file downloader`,
+	// 执行 downloader 的相关 action
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("rootCmd执行成功")
 	},
@@ -23,9 +24,12 @@ var Downloader = &cobra.Command{
 	// },
 }
 
-var url string
+var (
+	url string
+)
 
 func init() {
-	Downloader.AddCommand()
+	Downloader.AddCommand(version.GetVersionCmd())
 	Downloader.Flags().StringVarP(&url, "url", "", "", "File URL(required)")
+	Downloader.MarkFlagRequired("url")
 }

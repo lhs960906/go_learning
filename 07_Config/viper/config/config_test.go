@@ -30,7 +30,7 @@ func TestLoad(t *testing.T) {
 	}
 
 	// 最终以json格式输出
-	fmt.Println("data:\t", string(data))
+	log.Println("data:\t", string(data))
 
 	for {
 		time.Sleep(1 * time.Second)

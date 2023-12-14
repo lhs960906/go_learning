@@ -80,7 +80,7 @@ func DynamicReloadConfig() {
 	vip.OnConfigChange(func(event fsnotify.Event) {
 		log.Printf("Detect config change: %s \n", event.String())
 
-		// 热加载配置
+		// 热加载配置到 Cfg
 		vip.Unmarshal(Cfg)
 
 		// 重新序列化为 json 并以 json 格式输出

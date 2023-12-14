@@ -1,13 +1,20 @@
 package config
 
 import (
-	"fmt"
+	"encoding/json"
+	"log"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
 
+var (
+	vip *viper.Viper
+	Cfg = &Config{}
+)
+
 type Config struct {
-	GlobalConfig *GlobalConfig
+	Global *Global `json:"global"`
 	// StorageConfig *StorageConfig
 }
 
@@ -15,22 +22,48 @@ type Config struct {
 // 	// MySQLConfig  *MySQLConfig
 // }
 
-type GlobalConfig struct {
-	Concurrency int
-	Filepath    string
+type Global struct {
+	Concurrency int `json:"concurrency"`
 }
 
-func init() {
-	// 配置设置和读取
-	viper.SetDefault("concurrency", 3)
-	viper.SetDefault("config", "../etc/config.yaml")
-	viper.SetConfigFile("../etc/config.yaml") // 指定配置文件路径
-	viper.SetConfigName("config")             // 配置文件名称(无扩展名)
-	viper.SetConfigType("yaml")               // 如果配置文件的名称中没有扩展名，则需要配置此项
-	viper.AddConfigPath("../etc/")            // 查找配置文件所在的路径
-	viper.AddConfigPath(".")                  // 多次调用以添加多个搜索路径；还可以在工作目录中查找配置
-	err := viper.ReadInConfig()               // 查找并读取配置文件
-	if err != nil {                           // 处理读取配置文件的错误
-		panic(fmt.Errorf("fatal error config file: %s", err))
+// 返回配置的并发数
+func (conf *Config) GetConcurrency() int {
+	return Cfg.Global.Concurrency
+}
+
+// 将配置加载 viper 实例中
+func Load() *viper.Viper {
+	vip = viper.New()
+	vip.AddConfigPath("etc/")    // 设置读取的文件路径
+	vip.AddConfigPath("../etc/") // 设置读取的文件路径
+	vip.AddConfigPath(".")       // 设置读取的文件路径,当前路径
+	vip.SetConfigName("config")  // 设置读取的文件名
+	vip.SetConfigType("yaml")    // 设置文件的类型
+
+	// 尝试进行配置读取
+	err := vip.ReadInConfig()
+	if err != nil {
+		panic(err)
 	}
+
+	return vip
+}
+
+// 动态加载配置到 Config 实例中
+func DynamicReloadConfig() {
+	vip.WatchConfig()
+	vip.OnConfigChange(func(event fsnotify.Event) {
+		log.Printf("Detect config change: %s \n", event.String())
+
+		// 热加载配置到 Cfg
+		vip.Unmarshal(Cfg)
+
+		// 配置重新序列化为 json 并以 json 格式输出
+		data, err := json.Marshal(Cfg)
+		if err != nil {
+			log.Printf("err:, %v\t", err.Error())
+			return
+		}
+		log.Printf("data: %s\t", string(data))
+	})
 }
