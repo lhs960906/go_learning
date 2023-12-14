@@ -157,8 +157,19 @@ Range units 被定义在了 3.12 章节。
 
 
 #### 14.35.2、Range Retrieval Requests（范围检索请求）
+使用条件或无条件 GET 方法的 HTTP 检索请求可以使用 Range 请求标头请求实体的一个或多个子范围，而不是整个实体，这适用于作为请求结果返回的实体：
+```shell
+Range = "Range" ":" ranges-specifier
+```
+服务器可以忽略 Range 标头。 然而，HTTP/1.1 源服务器和中间缓存应该尽可能支持字节范围，因为范围支持从部分失败的传输中有效恢复，并支持大型实体的有效部分检索。
 
+如果服务器支持 Range 表头并且指定了一个或多个适合该的范围：
+* 如果 GET 成功，则无条件 GET 中 Range 标头的存在会修改返回的内容。 换句话说，响应携带状态码 206（部分内容）而不是 200（正常）。
+* 如果 GET 成功并且条件为真，条件 GET（使用 If-Modified-Since 和 If-None-Match 之一或两者，或者 If-Unmodified-Since 和 If-Match 之一或两者的请求）中存在 Range 标头会修改返回的内容。如果条件为 false，它不会影响返回的 304（未修改）响应。
 
+某些情况下，除了 Range 标头之外，使用 If-Range 标头（参见第 14.27 节）可能更合适。
+
+如果支持范围的代理接收范围请求，将请求转发到入站服务器，并接收整个实体的回复，则它应该只将请求的范围返回给其客户端。如果与其缓存分配策略一致，它应该将整个接收到的响应存储在其缓存中。
 
 # 附录
 
@@ -169,3 +180,7 @@ entity：实体；指 http 请求或响应。
 entity-header：实体头；就是 http 请求或响应的 header。
 
 entity-body：实体体；就是 http 请求或响应的 body。
+
+conditional GET：
+
+unconditional GET：
