@@ -8,9 +8,7 @@ HTTP/1.1 在 Range（第 14.35 节）和 Content-Range（第 14.16 节）标头�
 	bytes-unit       = "bytes"
 	other-range-unit = token
 ```
-HTTP/1.1 定义的唯一范围单位是 `bytes`。HTTP/1.1 的实现可能会忽略其他单元指定的范围。HTTP/1.1 has been designed to allow implementations of applications that do not depend on knowledge of ranges.
-
-
+HTTP/1.1 定义的唯一范围单位是 `bytes`。HTTP/1.1 的实现可能会忽略其他单元指定的范围。HTTP/1.1 has been designed to allow implementations of applications that do not depend on knowledge of ranges。
 
 
 ## 14 Header Field Definitions（头字段定义）
